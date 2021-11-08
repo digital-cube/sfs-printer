@@ -20,3 +20,11 @@ service cups restart
 ```bash
 lpadmin -d QL-700
 ```
+
+apt install git
+git clone https://github.com/digital-cube/sfs-printer.git
+cd sfs-printer
+apt-get install python3-venv
+python3 -m venv .venv
+
+
