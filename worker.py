@@ -1,3 +1,4 @@
+import uuid
 import sys
 import json
 import time
@@ -5,10 +6,13 @@ import datetime
 import requests
 import os
 from sfsqr import generate
+import dotenv
 
 max_attempts = 5
 
 def main():
+
+    dotenv.load_dotenv()
 
     os.system('lpadmin -d Brother_QL-700')
 
@@ -23,13 +27,14 @@ def main():
         print('use prod or dev env')
         return
 
+    id_location = uuid.UUID(os.getenv('id_location'))
+
     if env=='prod':
-        id_location = '3439548f-fffe-4024-824b-47d1c7f95002'
         url = f"https://app.sfscon.it/api/users/should-i-print/{id_location}"
         
     if env=='dev':
-        id_location = '8f48922a-dbcc-40f1-9367-3ffa940f87fc'	# entrance1 @ dev
         url = f"https://opencon.dev.digitalcube.dev/api/users/should-i-print/{id_location}"
+
 
 
     status = f'{env} waiting-for-print-job'
@@ -58,7 +63,7 @@ def main():
             status = r['status']
             if status == 'nothing-to-print':
                 if npi % 100 == 0:
-                    print(env, timestamp, status)
+                    print(env, timestamp, status, 'on',id_location)
                 time.sleep(0.2)
                 npi += 1
         
@@ -72,14 +77,14 @@ def main():
     
             fname = generate(r)
             
-            cmd = f'/usr/bin/lpr {fname}'
-     #       cmd = '/usr/bin/lpr res.png'
+     #       cmd = f'/usr/bin/lpr {fname}'
+            cmd = '/usr/bin/lpr res.png'
     
             print(env, 'cmd',cmd)
             os.system(cmd)
     
             
-            for attempt in range(1,max_attempts+1):
+            for attempt in range(0,max_attempts+1):
                 time.sleep(1)
                 r = os.system(f'/usr/bin/lpstat > /tmp/lps')
                 with open ('/tmp/lps','rt') as f:
@@ -89,9 +94,11 @@ def main():
                     if c==['']:
                         break
     
+            print("attempt",attempt)
+    
             os.system('/usr/bin/lprm -')
                         
-            if attempt == max_attempts:
+            if attempt >= max_attempts:
                 status = 'error'
     
             try:    
