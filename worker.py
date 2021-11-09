@@ -16,7 +16,6 @@ def main():
 
 #    os.system('lpadmin -d Brother_QL-700')
     os.system('lpadmin -d QL-700')
-    os.system("echo -n -e '\x1b\x69\x55\x41\x00\x00' > /dev/usb/lp0")
     
     env=None
     
