@@ -14,7 +14,8 @@ def main():
 
     dotenv.load_dotenv()
 
-    os.system('lpadmin -d Brother_QL-700')
+#    os.system('lpadmin -d Brother_QL-700')
+    os.system('lpadmin -d QL-700')
 
     env=None
     
