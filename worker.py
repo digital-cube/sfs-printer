@@ -77,8 +77,8 @@ def main():
     
             fname = generate(r)
             
-     #       cmd = f'/usr/bin/lpr {fname}'
-            cmd = '/usr/bin/lpr res.png'
+            cmd = f'/usr/bin/lpr {fname}'
+#            cmd = '/usr/bin/lpr res.png'
     
             print(env, 'cmd',cmd)
             os.system(cmd)
