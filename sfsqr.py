@@ -12,16 +12,16 @@ def main():
     "data": {
         "qrcodeid": "033e2cb9-5581-42cd-9aa7-05259568cf85",
         "title": "SFSCon 2021",
-        "first_name": "Karbon",
-        "last_name": "Hansjörg",
-        "company": "Telmekom",
+        "first_name": "Luca",
+        "last_name": "Miotto",
+        "company": "NOI Techpark",
     },
         "status": "print"
     }
 
-    gen(r)
-    #a  = generate(r)
-    #print("A",a)
+    #gen(r)
+    a  = generate(r)
+    print("A",a)
     
 def gen(r):
 
@@ -56,7 +56,13 @@ def generate(r):
     
     img2 = PIL.Image.new("1", (img.size[0], 100 + img.size[1] + 400), (255))
 
+    noi = PIL.Image.open('noi.png')#.convert('RGB')
+
+    print("SHOW")
+
+    
     img_draw = PIL.ImageDraw.Draw(img2)
+#    img_draw = PIL.ImageDraw.Draw(noi)
     
     offset = 0
     
@@ -66,10 +72,21 @@ def generate(r):
         if tw < img.size[0]:
             break
     
-    img_draw.text((img.size[0] / 2 - tw / 2, 0), r['data']['title'], fill='black', font=font)
+#    img_draw.text((img.size[0] / 2 - tw / 2, 0), r['data']['title'], fill='black', font=font)   
+#    offset += th + 20
+
+    print(noi.size)
+
+    x=0.1
+        
+    size=(int(noi.size[0]*x), int(noi.size[1]*x))    
     
-    offset += th + 20
+    print(size)
+
+    noi = noi.resize( size, PIL.Image.BICUBIC)
     
+    img2.paste(noi, (int((img.size[0]-noi.size[0])/2), offset))
+    offset += size[1]
     img2.paste(img, (0, offset))
     
     offset += img.size[1]
