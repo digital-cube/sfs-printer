@@ -12,9 +12,9 @@ def main():
     "data": {
         "qrcodeid": "033e2cb9-5581-42cd-9aa7-05259568cf85",
         "title": "SFSCon 2021",
-        "first_name": "Luca",
-        "last_name": "Miotto",
-        "company": "NOI Techpark",
+        "first_name": "Jakob",
+        "last_name": "Schwienbacher",
+        "company": "Telmekom",
     },
         "status": "print"
     }
@@ -148,7 +148,7 @@ def generate2(r):
     with open('sfs2021.png') as f:
         sfsimg = PIL.Image.open("sfs2021.png")
 
-        sx = 0.85
+        sx = 0.85*0.9
         #print(sfsimg.size)
         s = sfsimg.size
         s = (int(s[0]*sx), int(s[1]*sx))
