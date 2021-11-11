@@ -5,7 +5,7 @@ import time
 import datetime
 import requests
 import os
-from sfsqr import generate
+from sfsqr import generate2 as generate
 import dotenv
 
 max_attempts = 5
