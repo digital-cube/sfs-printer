@@ -143,7 +143,7 @@ def generate2(r):
     bckg = PIL.Image.new("1", (width, height), (255))
     
     qrimg = qrcode.make(qrcodeid)
-    qrimg = qrimg.resize((220,220),PIL.Image.ANTIALIAS)
+    qrimg = qrimg.resize((int(220*1.2),int(220*1.2)),PIL.Image.ANTIALIAS)
 
     with open('sfs2021.png') as f:
         sfsimg = PIL.Image.open("sfs2021.png")
