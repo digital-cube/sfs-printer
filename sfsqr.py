@@ -184,6 +184,7 @@ def generate2(r):
     fname = f'/tmp/label-{qrcodeid}.png'
     bckg.save(fname)
 
+    return fname
     
 if __name__=='__main__':
     main()
