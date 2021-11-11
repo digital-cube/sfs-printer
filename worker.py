@@ -8,7 +8,7 @@ import os
 from sfsqr import generate2 as generate
 import dotenv
 
-max_attempts = 5
+max_attempts = 10
 
 def main():
 
