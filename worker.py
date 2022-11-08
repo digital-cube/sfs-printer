@@ -91,6 +91,7 @@ async def main():
     status = f'{env} waiting-for-print-job'
     npi=0
     while True:
+        print(1)
 
 #        time.sleep(30)
         
@@ -137,7 +138,7 @@ async def main():
 
             fname = generate2(response['print'])
             
-#            cmd = f'/usr/bin/lpr {fname}'
+            cmd = f'/usr/bin/lpr {fname}'
             cmd = '/usr/bin/lpr res.png'
     
             log.debug(f'cmd {cmd}')

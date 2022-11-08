@@ -3,25 +3,6 @@ import qrcode
 import PIL
 import PIL.Image, PIL.ImageDraw
 
-def main():
-    r = {
-    "callback": {
-        "id": "7355e8bd-1c7a-4b42-b5d0-7df1a2a03901",
-        "url": "https://opencon.dev.digitalcube.dev/api/print/callback/7355e8bd-1c7a-4b42-b5d0-7df1a2a03901"
-    },
-    "data": {
-        "qr_code": "033e2cb9-5581-42cd-9aa7-05259568cf85",
-        "title": "SFSCon 2021",
-        "first_name": "Jakob",
-        "last_name": "Schwienbacher",
-        "organization": "Telmekom",
-    },
-        "status": "print"
-    }
-
-    #gen(r)
-    a  = generate2(r)
-    #print("A",a)
     
 def gen(r):
 
@@ -135,9 +116,6 @@ def generate(r):
     
 def generate2(r):
 
-#    import pdb
-#    pdb.set_trace()
-    
     qr_code = r['qr_code']
 
     width = 720
@@ -148,16 +126,13 @@ def generate2(r):
     qrimg = qrcode.make(qr_code)
     qrimg = qrimg.resize((int(220*1.2),int(220*1.2)),PIL.Image.ANTIALIAS)
 
-#    with open('sfs2022.png') as f:
     if True:
         sfsimg = PIL.Image.open("sfs2022.png")
 
         sx = 0.85*0.9
-        #print(sfsimg.size)
         s = sfsimg.size
         s = (int(s[0]*sx), int(s[1]*sx))
         sfsimg = sfsimg.resize(s)
-        #print(s)
 
 
     img_draw = PIL.ImageDraw.Draw(bckg)
@@ -193,8 +168,23 @@ def generate2(r):
 
     return fname
     
-if __name__=='__main__':
-    main()
-    
+def main():
+    r = {
+    "callback": {
+        "id": "7355e8bd-1c7a-4b42-b5d0-7df1a2a03901",
+        "url": "https://opencon.dev.digitalcube.dev/api/print/callback/7355e8bd-1c7a-4b42-b5d0-7df1a2a03901"
+    },
+    "data": {
+        "qr_code": "033e2cb9-5581-42cd-9aa7-05259568cf85",
+        "title": "SFSCon 2021",
+        "first_name": "Jakob",
+        "last_name": "Schwienbacher",
+        "organization": "Telmekom",
+    },
+        "status": "print"
+    }
+
+    a  = generate2(r)
+
 if __name__=='__main__':
     main()
