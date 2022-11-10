@@ -29,30 +29,53 @@ if 'dev' in sys.argv:
 
 
 async def get_tenant():
-    async with httpx.AsyncClient() as client:
-        r = await client.get(f'{server}/api/v3/tenants/code/OPENCON')
-        return json.loads(r.text)['id']
+    id_tenant = None
+    while not id_tenant:
+        try:
+            async with httpx.AsyncClient() as client:
+                r = await client.get(f'{server}/api/v3/tenants/code/OPENCON')
+                id_tenant = json.loads(r.text)['id']
+        except:
+            time.sleep(2)
+    return id_tenant
         
 async def get_conference():
-    async with httpx.AsyncClient() as client:
-        r = await client.get(f'{server}/api/v3/conferences/acronym/sfscon-2022')
-        return json.loads(r.text)['id']
+    id_conference = None
+    while not id_conference:
+        try:
+            async with httpx.AsyncClient() as client:
+                r = await client.get(f'{server}/api/v3/conferences/acronym/sfscon-2022')
+                id_conference = json.loads(r.text)['id']
+        except:
+            time.sleep(2)
+    return id_conference
     
 async def get_token(id_tenant, username, password):
-    async with httpx.AsyncClient() as client:
-        r = await client.post(f'{server}/api/v3/tenants/{id_tenant}/sessions',content=json.dumps({'username': username, 'password': password}))
-        return json.loads(r.text)['token']
+    token = None
+    while not token:
+        try:
+            async with httpx.AsyncClient() as client:
+                r = await client.post(f'{server}/api/v3/tenants/{id_tenant}/sessions',content=json.dumps({'username': username, 'password': password}))
+                token = json.loads(r.text)['token']
+        except:
+            time.sleep(2)
+    return token
 
 async def get_id_location_by_name(token, id_conference, location_name):
-    async with httpx.AsyncClient() as client:
-        r = await client.get(f'{server}/api/v3/conferences/{id_conference}/entrances', headers={'Authorization': f'Bearer {token}'})
-        r = json.loads(r.text)
-        if location_name not in r:
-            log.critical("location name not exists {location_name}")
-            sys.exit()
-            
-        return r[location_name]
-            
+    _location_name = None
+    while not _location_name:
+        try:
+            async with httpx.AsyncClient() as client:
+                r = await client.get(f'{server}/api/v3/conferences/{id_conference}/entrances', headers={'Authorization': f'Bearer {token}'})
+                r = json.loads(r.text)
+                if location_name not in r:
+                    log.critical("location name not exists {location_name}")
+                    sys.exit()
+                    
+                _location_name = r[location_name]
+        except:
+            time.sleep(2)
+    return _location_name
         
         
 
@@ -139,7 +162,7 @@ async def main():
             fname = generate2(response['print'])
             
             cmd = f'/usr/bin/lpr {fname}'
-            cmd = '/usr/bin/lpr res.png'
+#            cmd = '/usr/bin/lpr res.png'
     
             log.debug(f'cmd {cmd}')
             os.system(cmd)
