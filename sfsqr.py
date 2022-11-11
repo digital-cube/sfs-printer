@@ -29,94 +29,9 @@ def gen(r):
     #print('x',img.save('res.png'))
     
     
-def generate(r):
-    
-    qr_code = r['qr_code']
-    
-    img = qrcode.make(qr_code)
-    
-    img2 = PIL.Image.new("1", (img.size[0], 100 + img.size[1] + 400), (255))
-
-    noi = PIL.Image.open('noi.png')#.convert('RGB')
-
-    #print("SHOW")
-
-    
-    img_draw = PIL.ImageDraw.Draw(img2)
-#    img_draw = PIL.ImageDraw.Draw(noi)
-    
-    offset = 0
-    
-    for fsize in (48, 42, 36, 32, 24, 16):
-        font = PIL.ImageFont.truetype("font.ttf", fsize)
-        tw, th = font.getsize(r['title'])
-        if tw < img.size[0]:
-            break
-    
-#    img_draw.text((img.size[0] / 2 - tw / 2, 0), r['title'], fill='black', font=font)   
-#    offset += th + 20
-
-    #print(noi.size)
-
-    x=0.075
-        
-    size=(int(noi.size[0]*x), int(noi.size[1]*x))    
-    
-    #print(size)
-
-    noi = noi.resize( size, PIL.Image.BICUBIC)
-    
-    img2.paste(noi, (int((img.size[0]-noi.size[0])/2), offset))
-    offset += size[1]
-    img2.paste(img, (0, offset))
-    
-    offset += img.size[1]
-    
-    text = r['first_name']
-    if r['last_name']:
-        text += ' ' + r['last_name']
-    
-    for fsize in (48, 42, 36, 32, 24, 16):
-    
-        font = PIL.ImageFont.truetype("font.ttf", fsize)
-        width = font.getsize(text)[0]
-        height = font.getsize(text)[1]
-    
-        if width < img2.size[0]:
-            break
-    
-    #print(f'addig {text} using {fsize}')
-    img_draw.text((img.size[0] / 2 - width / 2, offset), text, fill='black', font=font)
-    offset += height + 10
-    
-    if r['organization']:
-    
-        text = r['organization']
-    
-        for fsize in (48, 42, 36, 32, 24, 16):
-            font = PIL.ImageFont.truetype("font.ttf", fsize)
-    
-            cwidth = font.getsize(text)[0]
-            cheight = font.getsize(text)[1]
-    
-            if cwidth < img2.size[0]:
-                break
-    
-        #print(f'addig {text} using {fsize}')
-        img_draw.text((img.size[0] / 2 - cwidth / 2, offset), text, fill='black', font=font)
-    
-        offset += cheight + 10
-    
-    img2 = img2.crop((0, 0, img2.size[0], offset))
-    
-    fname = f'/tmp/label-{qr_code}.png'
-    img2.save(fname)
-    return fname
-    
-    
 def generate2(r):
 
-    qr_code = r['qr_code']
+    qr_code = r['data']['qr_code']
 
     width = 720
     height = 480
@@ -141,18 +56,22 @@ def generate2(r):
     font = PIL.ImageFont.truetype("font-bold.ttf", fsize)    
     font2 = PIL.ImageFont.truetype("font.ttf", fsize)    
 
-    dname = r['first_name']+' '+r['last_name']
+    dname = r['data']['first_name']+' '+r['data']['last_name']
 
+#    import pdb
+#    pdb.set_trace()
     if len(dname)>18:
-        img_draw.text((32,32), r['first_name'], fill='black', font=font)  
-        img_draw.text((32,108), r['last_name'], fill='black', font=font)  
-        if 'organization' in r and r['organization']:
-            img_draw.text((32,184), r['organization'], fill='black', font=font2)  
+        img_draw.text((32,32), r['data']['first_name'], fill='black', font=font)  
+        img_draw.text((32,108), r['data']['last_name'], fill='black', font=font)  
+        if 'organization' in r['data'] and r['data']['organization']:
+            img_draw.text((32,184), r['data']['organization'], fill='black', font=font2)  
+            print("img_draw.text((32,184), r['data']['organization'], fill='black', font=font2)  ")
     else:
-        img_draw.text((32,32), r['first_name']+' '+r['last_name'], fill='black', font=font)  
+        img_draw.text((32,32), r['data']['first_name']+' '+r['data']['last_name'], fill='black', font=font)  
     
-        if 'organization' in r and r['organization']:
-            img_draw.text((32,108), r['organization'], fill='black', font=font2)  
+        if 'organization' in r['data'] and r['data']['organization']:
+            img_draw.text((32,108), r['data']['organization'], fill='black', font=font2)  
+            print("img_draw.text((32,108), r['data']['organization'], fill='black', font=font2)  ")
 
     
     bckg.paste(qrimg,(bckg.size[0]-10-qrimg.size[0],
@@ -174,17 +93,15 @@ def main():
         "id": "7355e8bd-1c7a-4b42-b5d0-7df1a2a03901",
         "url": "https://opencon.dev.digitalcube.dev/api/print/callback/7355e8bd-1c7a-4b42-b5d0-7df1a2a03901"
     },
-    "data": {
-        "qr_code": "033e2cb9-5581-42cd-9aa7-05259568cf85",
-        "title": "SFSCon 2021",
-        "first_name": "Jakob",
-        "last_name": "Schwienbacher",
-        "organization": "Telmekom",
-    },
+    "data": 
+ {"qr_code": "ad8e4e32-ae98-46d3-8375-195213a7c66c", "last_name": "Peric", "first_name": "Petar", "display_name": "Petar Peric", "organization": "DC"}
+
+    ,
         "status": "print"
     }
 
     a  = generate2(r)
-
+    print(a)
+    
 if __name__=='__main__':
     main()
