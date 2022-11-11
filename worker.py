@@ -114,7 +114,6 @@ async def main():
     status = f'{env} waiting-for-print-job'
     npi=0
     while True:
-        print(1)
 
 #        time.sleep(30)
         
@@ -124,21 +123,21 @@ async def main():
                 response = await client.get(url, headers={'Authorization': f'Bearer {token}'})
                 
         except Exception as e:
-            log.critical(f'.error {e} sleeping 10 sec')
-            time.sleep(10)
+            log.critical(f'.error {e} sleeping 1 sec')
+            time.sleep(1)
             continue
         
         try:
             
             if response.status_code != 200:
                 status = 'opencon-service-not-reachable'
-                print(response)
-                print(dir(response))
                 log.critical(f'error response.status_code != 200; {response.status_code} sleeping 10')
-                time.sleep(10)
+                time.sleep(1)
                 continue
     
-            response = json.loads(response.text)        
+            response = json.loads(response.text)
+            
+            log.info(f"RESPONSE {response}")        
 
             if 'print' not in response or not response['print']:
                 log.info('nothing-to-print')
@@ -152,11 +151,14 @@ async def main():
             
             display_name = response['print']['first_name']
             
-            s = display_name.split(' ')
-            first_name=s[0]
-            last_name=' '.join(s[1:])
-            response['print']['first_name'] = first_name
-            response['print']['last_name'] = last_name
+#            s = display_name.split(' ')
+#            first_name=s[0]
+            last_name=response['print']['last_name']
+            first_name=response['print']['first_name']
+            
+#            last_name=' '.join(s[1:])
+#            response['print']['first_name'] = first_name
+#            response['print']['last_name'] = last_name
             
 
             fname = generate2(response['print'])
@@ -169,7 +171,7 @@ async def main():
             
             
             for attempt in range(0,max_attempts+1):
-                time.sleep(0.25)
+                time.sleep(0.45)
                 r = os.system(f'/usr/bin/lpstat > /tmp/lps')
                 with open ('/tmp/lps','rt') as f:
                     c = f.read().strip()
