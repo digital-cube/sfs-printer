@@ -114,8 +114,6 @@ async def main():
     status = f'{env} waiting-for-print-job'
     npi=0
     while True:
-        print(1)
-
 #        time.sleep(30)
         
         response = None
@@ -125,7 +123,7 @@ async def main():
                 
         except Exception as e:
             log.critical(f'.error {e} sleeping 10 sec')
-            time.sleep(10)
+            time.sleep(2)
             continue
         
         try:
@@ -152,11 +150,14 @@ async def main():
             
             display_name = response['print']['first_name']
             
-            s = display_name.split(' ')
-            first_name=s[0]
-            last_name=' '.join(s[1:])
-            response['print']['first_name'] = first_name
-            response['print']['last_name'] = last_name
+#            s = display_name.split(' ')
+#            first_name=s[0]
+#            last_name=' '.join(s[1:])
+#            response['print']['first_name'] = first_name
+#            response['print']['last_name'] = last_name
+
+            response['print']['first_name'] = response['print']['first_name']
+            response['print']['last_name'] = response['print']['last_name']
             
 
             fname = generate2(response['print'])
